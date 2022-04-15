@@ -44,6 +44,9 @@ corresponding label from `category_labels`.
 - `show_median=true`: Determines whether or not to have a line should the median value in the boxplot.
 - `boxplot_nudge=0.075`: Determines the distance away the boxplot should be placed from the center line when `center_boxplot` is `false`.
     This is the value used to recentering the boxplot.
+- `show_notch=false`: Draw the boxplot notch.
+- `notchwidth`=0.5`: multiplier of width for narrowest width of boxplot notch.
+- `show_outliers=true`: show outliers as points.
 
 ## Scatter Plot Specific Keywords
 - `side_scatter_nudge`: Default value is 0.02 if `plot_boxplots` is true, otherwise `0.075` default.
@@ -68,6 +71,9 @@ corresponding label from `category_labels`.
         strokewidth = 1.0,
         show_median = true,
         boxplot_nudge = 0.075,
+        show_notch=false,
+        notchwidth=0.5,
+        show_outliers=true,
 
         markersize = 2.0,
 
@@ -171,6 +177,9 @@ function plot!(plot::RainClouds)
     strokewidth = plot.strokewidth[]
     show_median = plot.show_median[]
     boxplot_nudge = plot.boxplot_nudge[]
+    show_notch = plot.boxplot.show_notch[]
+    notchwidth = plot.boxplot.notchwidth[]
+    show_outliers = plot.boxplot.show_outliers[]
 
     plot_boxplots = plot.plot_boxplots[]
     clouds = plot.clouds[]
@@ -222,7 +231,7 @@ function plot!(plot::RainClouds)
         scatter!(plot, category_x_position_array .+ side_scatter_nudge_with_direction .+ jitter .- recenter_to_boxplot_nudge_value,
             data_points; markersize=markersize, color=color)
 
-        plot_boxplots && boxplot!(plot, category_x_position_array .+ side_boxplot_nudge_with_direction .- recenter_to_boxplot_nudge_value, data_points, strokewidth=strokewidth, whiskerwidth=whiskerwidth, width=boxplot_width, markersize=markersize, color=color)
+        plot_boxplots && boxplot!(plot, category_x_position_array .+ side_boxplot_nudge_with_direction .- recenter_to_boxplot_nudge_value, data_points, strokewidth=strokewidth, whiskerwidth=whiskerwidth, width=boxplot_width, markersize=markersize, color=color, show_notch=show_notch, notchwidth=notchwidth, show_outliers=show_outliers)
     end
     # store the x positions, to set the axis
     plot[:x_positions_of_categories] = x_positions_of_categories
